@@ -1,5 +1,5 @@
 import tkinter as tk
-from view import MainView
+import view
 
 
 class App(tk.Tk):
@@ -12,6 +12,5 @@ class App(tk.Tk):
         # icon by <a target="_blank" href="https://icons8.com">Icons8</a>
         self.iconbitmap("./resources/icon_gamma.ico")
 
-        view = MainView(self)
-        view.grid(row=0, column=0, padx=10, pady=10)
-
+        # TODO: Load last known state of window settings and last turing machine used and hand to main view
+        view_ = view.MainView(self)
