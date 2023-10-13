@@ -17,12 +17,4 @@ class App(tk.Tk):
 
         # self.state('zoomed')
 
-        tm = model.TuringMachine()
-        tm.states[0] = {"1": ["7", "L", 2]}
-        tm.states.append({"0": ["a", "L", 1]})
-        tm.states.append({"2": ["4", "R", 0]})
-        tm.states.append({"1": ["2", "L", 2]})
-        print(tm.get_tape_alphabet())
-        print(tm.get_input_alphabet())
-
         view_ = view.MainView(self)
