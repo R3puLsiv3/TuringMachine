@@ -1,4 +1,3 @@
-import model
 
 
 class TuringMachine(object):
@@ -11,7 +10,7 @@ class TuringMachine(object):
             # current input -> [output, head movement, next state]
             cls.instance.states: list[dict[str, list[str, str, int]]] = []
             cls.instance.current_state = 0
-            cls.instance.blank_symbol = model.Settings().get_setting("TAPE_SETTINGS", "blank_symbol") or " "
+            cls.instance.blank_symbol = "_"
         return cls.instance
 
     def get_tape_alphabet(self) -> set[str]:

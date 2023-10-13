@@ -1,6 +1,5 @@
 import tkinter as tk
 import view
-import model
 
 
 class App(tk.Tk):
