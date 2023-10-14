@@ -7,8 +7,8 @@ class MyTestCase(unittest.TestCase):
 
     def setUp(self):
         self.settings = model.Settings()
-        if os.path.exists("config.ini"):
-            os.remove("config.ini")
+        if os.path.exists(model.CONFIG_PATH):
+            os.remove(model.CONFIG_PATH)
 
     def test_create_load(self):
         config1 = model.create_settings()
@@ -34,6 +34,10 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(self.settings.get_setting("TAPE_SETTINGS", "amount_tapes"),
                          self.other_settings.get_setting("TAPE_SETTINGS", "amount_tapes"),
                          "singleton settings class can have multiple instances")
+
+    def tearDown(self):
+        if os.path.exists(model.CONFIG_PATH):
+            os.remove(model.CONFIG_PATH)
 
 
 if __name__ == '__main__':
