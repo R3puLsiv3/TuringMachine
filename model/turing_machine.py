@@ -3,23 +3,22 @@ import model
 
 class TuringMachine(object):
 
-    def __new__(cls):
+    def __new__(cls, states=None, halting_states=None, entry_state=None, current_state=None):
         if not hasattr(cls, "instance"):
             cls.instance = super(TuringMachine, cls).__new__(cls)
 
-            # For the current state s and tape t states[s][t] is a collection of possible transitions of the form:
-            # current input -> [output, head movement, next state]
-            cls.instance.states: list[list[dict[str, list[str, str, int]]]] = []
-            cls.instance.halting_states: set = {}
-            cls.instance.current_state = 0
+            cls.instance.states: list[model.State] = states
+            cls.instance.halting_states: set[int] = halting_states
+            cls.instance.entry_state: int = entry_state
+            cls.instance.current_state: int = current_state
             cls.instance.blank_symbol = " "
         return cls.instance
 
     def get_tape_alphabet(self) -> set[str]:
-        return set([self.states[state][tape][inp][0] for state in range(len(self.states))
-                    for tape in range(len(self.states[state])) for inp in self.states[state][tape]])\
+        return set([transition.write for state in range(len(self.states))
+                    for transition in self.states[state].transitions]) \
             .union(self.get_input_alphabet()).union(self.blank_symbol)
 
     def get_input_alphabet(self) -> set[str]:
-        return set([key for state in range(len(self.states)) for tape in range(len(self.states[state]))
-                   for key in self.states[state][tape]]).difference(self.blank_symbol)
+        return set([transition.read for state in range(len(self.states))
+                    for transition in self.states[state].transitions]).difference(self.blank_symbol)
