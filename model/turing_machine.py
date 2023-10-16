@@ -1,5 +1,7 @@
 import model
 
+BLANK_SYMBOL = " "
+
 
 class TuringMachine(object):
 
@@ -11,14 +13,13 @@ class TuringMachine(object):
             cls.instance.halting_states: set[int] = halting_states
             cls.instance.entry_state: int = entry_state
             cls.instance.current_state: int = current_state
-            cls.instance.blank_symbol = " "
         return cls.instance
 
     def get_tape_alphabet(self) -> set[str]:
         return set([transition.write for state in range(len(self.states))
                     for transition in self.states[state].transitions]) \
-            .union(self.get_input_alphabet()).union(self.blank_symbol)
+            .union(self.get_input_alphabet()).union(BLANK_SYMBOL)
 
     def get_input_alphabet(self) -> set[str]:
         return set([transition.read for state in range(len(self.states))
-                    for transition in self.states[state].transitions]).difference(self.blank_symbol)
+                    for transition in self.states[state].transitions]).difference(BLANK_SYMBOL)
