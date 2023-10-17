@@ -8,3 +8,4 @@ from model.settings import CONFIG_PATH
 from model.transition import Transition
 from model.state import State
 from model.head import Head
+from model.tape import Tape

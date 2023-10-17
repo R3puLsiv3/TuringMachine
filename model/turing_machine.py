@@ -5,14 +5,14 @@ BLANK_SYMBOL = " "
 
 class TuringMachine(object):
 
-    def __new__(cls, states=None, halting_states=None, entry_state=None, current_state=None):
+    def __new__(cls, states=None, tapes=None, halting_states=None, entry_state=None):
         if not hasattr(cls, "instance"):
             cls.instance = super(TuringMachine, cls).__new__(cls)
 
             cls.instance.states: list[model.State] = states
+            cls.instance.tapes: list[model.Tape] = tapes
             cls.instance.halting_states: set[int] = halting_states
             cls.instance.entry_state: int = entry_state
-            cls.instance.current_state: int = current_state
         return cls.instance
 
     def get_tape_alphabet(self) -> set[str]:
