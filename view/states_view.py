@@ -1,17 +1,18 @@
-from tkinter import ttk
+import customtkinter as ctk
 
 
-class StatesView(ttk.Frame):
+class StatesView(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        parent_width = parent.winfo_width()
-        parent_height = parent.winfo_height()
+        self.scrollable_frame = ctk.CTkScrollableFrame(self, orientation="horizontal")
+        self.scrollable_frame.pack(fill="both", expand=True)
 
-        self["padding"] = 5
-        self["width"] = parent_width - 20
-        self["height"] = parent_height - 20
-        self["borderwidth"] = 5
-        self["relief"] = "solid"
+        name = "0"
+        self.add_state(name)
 
-        self.grid(column=0, row=0)
+    def add_state(self, name: str):
+        example_state1 = ctk.CTkTextbox(self.scrollable_frame).pack(fill="y", expand=True, side="right", padx="5", pady="5")
+        example_state2 = ctk.CTkTextbox(self.scrollable_frame).pack(fill="y", expand=True, side="right", padx="5", pady="5")
+        example_state3 = ctk.CTkTextbox(self.scrollable_frame).pack(fill="y", expand=True, side="right", padx="5", pady="5")
+

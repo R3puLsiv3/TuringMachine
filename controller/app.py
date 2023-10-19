@@ -1,10 +1,14 @@
-import tkinter as tk
+import customtkinter as ctk
+import sys
 import view
 import model
 import controller
 
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
 
-class App(tk.Tk):
+
+class App(ctk.CTk):
     def __init__(self, title):
         super().__init__()
 
@@ -21,6 +25,7 @@ class App(tk.Tk):
         self.setup_window(_model["settings"])
 
         _view = view.MainView(self)
+        _view.pack(fill="both", expand=True, padx=10, pady=10)
 
         _controller = controller.TuringMachineController(_model, _view)
 
@@ -30,7 +35,10 @@ class App(tk.Tk):
 
     def setup_window(self, settings: dict):
         if settings["full-screen"]:
-            self.state("zoomed")
+            if "linux" in sys.platform:
+                self.after(0, lambda: self.attributes("zoomed", True))
+            else:
+                self.after(0, lambda: self.state("zoomed"))
         else:
             width = settings["width"]
             height = settings["height"]

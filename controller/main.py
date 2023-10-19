@@ -9,5 +9,6 @@ def main():
     application = app.App(APP_TITLE)
     application.mainloop()
 
+
 if __name__ == '__main__':
     main()
