@@ -1,6 +1,8 @@
-from tkinter import ttk
+import customtkinter as ctk
 
 
-class TapesView(ttk.Frame):
+class TapesView(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__(parent, corner_radius=0)
+
+

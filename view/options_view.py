@@ -1,6 +1,6 @@
-from tkinter import ttk
+import customtkinter as ctk
 
 
-class OptionsView(ttk.Frame):
+class OptionsView(ctk.CTkFrame):
     def __init__(self, parent):
-        super().__init__(parent)
+        super().__init__(parent, height=50)

@@ -5,7 +5,7 @@ class StatesView(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
 
-        self.scrollable_frame = ctk.CTkScrollableFrame(self, orientation="horizontal")
+        self.scrollable_frame = ctk.CTkScrollableFrame(self, orientation="horizontal", corner_radius=0)
         self.scrollable_frame.pack(fill="both", expand=True)
 
         name = "0"
