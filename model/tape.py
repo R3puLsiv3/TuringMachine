@@ -2,9 +2,8 @@ import model
 
 
 class Tape:
-
-    def __init__(self, state, position=None, current_state=None, amortization_value_front=1,
-                 amortization_value_back=1, space_used=None):
+    def __init__(self, state, position=None, current_state=None, amortization_value_front=128,
+                 amortization_value_back=128, space_used=None):
         self.state: list[str] = state
         self.head = model.Head(position, current_state)
         self.amortization_value_front = amortization_value_front
