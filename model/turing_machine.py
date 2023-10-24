@@ -11,7 +11,7 @@ class TuringMachine(object):
 
             cls.instance.states: list[model.State] = states
             cls.instance.tapes: list[model.Tape] = tapes
-            cls.instance.halting_states: set[int] = halting_states
+            cls.instance.halting_states: set[str] = halting_states
             cls.instance.entry_state: int = entry_state
         return cls.instance
 

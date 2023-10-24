@@ -25,7 +25,7 @@ class App(ctk.CTk):
         self.setup_window(_model["settings"])
 
         _view = view.MainView(self)
-        _view.pack(fill="both", expand=True, padx=10, pady=10)
+        _view.pack(fill="both", expand=True)
 
         _controller = controller.TuringMachineController(_model, _view)
 
