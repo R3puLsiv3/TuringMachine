@@ -16,7 +16,7 @@ class StateView(ctk.CTkFrame):
         self.entry_name = ctk.CTkEntry(self.frame_top, placeholder_text="Name", width=150, height=18)
         self.entry_name.pack(fill="both", expand=True, padx=(0, 10), pady=2, side="left")
 
-        self.checkbox_halting_state = ctk.CTkCheckBox(self.frame_top, text="Halt", width=20, font=("", 18, "bold"))
+        self.checkbox_halting_state = ctk.CTkCheckBox(self.frame_top, text="Halt", width=20, font=("", 14, "bold"))
         self.checkbox_halting_state.pack(padx=(0, 10), pady=2, side="left")
 
         image_save_light = Image.open("./resources/save_light.png")

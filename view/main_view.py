@@ -1,5 +1,4 @@
 import customtkinter as ctk
-from tkinter import ttk
 import tkinter as tk
 import view
 
@@ -7,10 +6,6 @@ import view
 class MainView(tk.PanedWindow):
     def __init__(self, parent):
         super().__init__(parent, orient="vertical", bg="grey", bd=0, sashwidth=6, opaqueresize=False)
-
-        style = ttk.Style()
-        style.theme_use("clam")
-        style.configure("cool.TPanedwindow", background="grey")
 
         self.controller = None
 

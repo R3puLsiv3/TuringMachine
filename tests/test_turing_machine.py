@@ -12,7 +12,7 @@ class MyTestCase(unittest.TestCase):
         transitions1 = [model.Transition(0, "1", "0", "0", "R", "0"), model.Transition(0, "1", "1", " ", "R", "1"),
                         model.Transition(0, "1", " ", "1", "L", "1")]
 
-        states = [model.State("0", False, transitions0), model.State("1", False, transitions1)]
+        states = [model.State("0", True, transitions0), model.State("1", False, transitions1)]
 
         self.tm = model.TuringMachine(states)
 
@@ -21,6 +21,9 @@ class MyTestCase(unittest.TestCase):
 
     def test_get_input_alphabet(self):
         self.assertSetEqual(self.tm.get_input_alphabet(), {"0", "1"}, "incorrect input alphabet")
+
+    def test_get_halting_states(self):
+        self.assertSetEqual(self.tm.get_halting_states(), {"0"}, "incorrect halting states")
 
 
 if __name__ == '__main__':
