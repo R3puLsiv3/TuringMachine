@@ -4,7 +4,7 @@ BLANK_SYMBOL = " "
 
 
 class TuringMachine(object):
-    def __new__(cls, states=None, tapes=None, halting_states=None, entry_state=None):
+    def __new__(cls, states=None, tapes=None, entry_state=None):
         if not hasattr(cls, "instance"):
             cls.instance = super(TuringMachine, cls).__new__(cls)
 

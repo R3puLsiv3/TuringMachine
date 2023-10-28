@@ -23,24 +23,21 @@ class StateView(ctk.CTkFrame):
         image_save_dark = Image.open("./resources/save_dark.png")
         image_save = ctk.CTkImage(light_image=image_save_light, dark_image=image_save_dark, size=(20, 20))
 
-        self.button_save = ctk.CTkButton(self.frame_top, width=20, image=image_save, text="",
-                                         command=self.on_button_save_click)
+        self.button_save = ctk.CTkButton(self.frame_top, width=20, image=image_save, text="")
         self.button_save.pack(padx=(0, 2), pady=2, side="left")
 
         image_close_light = Image.open("./resources/close_light.png")
         image_close_dark = Image.open("./resources/close_dark.png")
         image_close = ctk.CTkImage(light_image=image_close_light, dark_image=image_close_dark, size=(20, 20))
 
-        self.button_delete = ctk.CTkButton(self.frame_top, width=20, image=image_close, text="", anchor="e",
-                                           command=self.on_button_delete_click)
+        self.button_delete = ctk.CTkButton(self.frame_top, width=20, image=image_close, text="", anchor="e")
         self.button_delete.pack(padx=(0, 2), pady=2, side="right")
 
         image_edit_light = Image.open("./resources/edit_light.png")
         image_edit_dark = Image.open("./resources/edit_dark.png")
         image_edit = ctk.CTkImage(light_image=image_edit_light, dark_image=image_edit_dark, size=(20, 20))
 
-        self.button_edit = ctk.CTkButton(self.frame_top, width=20, image=image_edit, text="",
-                                         command=self.on_button_edit_click)
+        self.button_edit = ctk.CTkButton(self.frame_top, width=20, image=image_edit, text="")
 
         self.textbox_bottom = ctk.CTkTextbox(self)
         self.textbox_bottom.pack(fill="both", expand=True, padx=5, pady=5)
@@ -51,9 +48,7 @@ class StateView(ctk.CTkFrame):
         self.add_transition("b", "a, R, 1")
         self.add_transition(" ", "b, N, 1")
 
-        name_show = ctk.CTkEntry(self, placeholder_text="Name")
-
-    def add_transition(self, right: str, left: str):
+    def add_transition(self, left: str, right: str):
         transition = view.TransitionView(self.frame_bottom, right, left)
         transition.pack(anchor="w", fill="x", expand=True)
 

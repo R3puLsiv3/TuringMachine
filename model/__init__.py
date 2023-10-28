@@ -9,3 +9,4 @@ from model.transition import Transition
 from model.state import State
 from model.head import Head
 from model.tape import Tape
+from model.base import Model
