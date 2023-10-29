@@ -39,34 +39,27 @@ class StateView(ctk.CTkFrame):
 
         self.button_edit = ctk.CTkButton(self.frame_top, width=20, image=image_edit, text="")
 
-        self.textbox_bottom = ctk.CTkTextbox(self)
-        self.textbox_bottom.pack(fill="both", expand=True, padx=5, pady=5)
+        self.textbox_transitions = ctk.CTkTextbox(self)
+        self.textbox_transitions.pack(fill="both", expand=True, padx=5, pady=5)
 
         self.frame_bottom = ctk.CTkScrollableFrame(self, orientation="vertical", width=100)
 
-        self.add_transition("M", "b, L, 2")
-        self.add_transition("b", "a, R, 1")
-        self.add_transition(" ", "b, N, 1")
-
-    def add_transition(self, left: str, right: str):
-        transition = view.TransitionView(self.frame_bottom, right, left)
+    def show_transition(self, transition: str):
+        transition = view.TransitionView(self.frame_bottom, transition)
         transition.pack(anchor="w", fill="x", expand=True)
 
-    def on_button_delete_click(self):
-        self.destroy()
-
-    def on_button_edit_click(self):
-        entry_name = ctk.CTkEntry(self, text=self.label_name.cget("text"))
-
-    def on_button_save_click(self):
+    def show_state(self, name: str, is_halting_state, transitions: list[str]):
         self.label_name.configure(width=60, height=18, font=("", 18, "bold"))
         self.entry_name.pack_forget()
         self.button_save.pack_forget()
         self.checkbox_halting_state.pack_forget()
-        self.label_name.configure(text=self.entry_name.get())
+        self.label_name.configure(text=name)
         self.label_name.pack(fill="both", expand=True, padx=10, pady=2, side="left")
         self.button_edit.pack(padx=(0, 2), pady=2, side="left")
-
-        self.textbox_bottom.pack_forget()
-        # TODO: Implement parser and create transition views
+        self.textbox_transitions.pack_forget()
         self.frame_bottom.pack(fill="both", expand=True, padx=5, pady=5)
+        for transition in transitions:
+            self.show_transition(transition)
+
+    def edit_state(self, name: str, is_halting_state: bool, transitions: str):
+        pass

@@ -2,8 +2,7 @@
 class OptionsController:
     def __init__(self, model, view):
         self.model = model
-        self.view = view
-        self.frame = self.view.options_frame
+        self.frame = view
 
         self.states_controller = None
         self.tapes_controller = None

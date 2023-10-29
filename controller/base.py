@@ -9,10 +9,10 @@ class Controller:
         self.view = _view
         self.model = _model
 
-        self.states_controller = controller.StatesController(_model, _view)
-        self.tapes_controller = controller.TapesController(_model, _view)
-        self.options_controller = controller.OptionsController(_model, _view)
-        self.info_controller = controller.InfoController(_model, _view)
+        self.states_controller = controller.StatesController(_model, _view.root.main_view.states_view)
+        self.tapes_controller = controller.TapesController(_model, _view.root.main_view.tapes_view)
+        self.options_controller = controller.OptionsController(_model, _view.root.main_view.options_view)
+        self.info_controller = controller.InfoController(_model, _view.root.main_view.info_view)
 
         self.options_controller.set_controllers(self.states_controller, self.tapes_controller, self.info_controller)
         self.states_controller.set_controllers(self.tapes_controller, self.options_controller, self.info_controller)

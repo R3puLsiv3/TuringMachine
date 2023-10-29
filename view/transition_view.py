@@ -3,8 +3,14 @@ from PIL import Image
 
 
 class TransitionView(ctk.CTkFrame):
-    def __init__(self, parent, left, right):
+    def __init__(self, parent, transition):
         super().__init__(parent, fg_color="transparent")
+
+        split_transition = transition.split()
+        print(split_transition[0])
+        print(split_transition[1])
+        left = split_transition[0]
+        right = split_transition[1]
 
         image_right_arrow_light = Image.open("./resources/arrow_right_light.png")
         image_right_arrow_dark = Image.open("./resources/arrow_right_dark.png")
