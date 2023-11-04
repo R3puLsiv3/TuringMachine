@@ -14,10 +14,25 @@ class StateView(ctk.CTkFrame):
         self.label_name = ctk.CTkLabel(self.frame_top)
 
         self.entry_name = ctk.CTkEntry(self.frame_top, placeholder_text="Name", width=150, height=18)
-        self.entry_name.pack(fill="both", expand=True, padx=(0, 10), pady=2, side="left")
+        self.entry_name.pack(fill="both", expand=True, pady=2, side="left")
 
-        self.checkbox_halting_state = ctk.CTkCheckBox(self.frame_top, text="Halt", width=20, font=("", 14, "bold"))
-        self.checkbox_halting_state.pack(padx=(0, 10), pady=2, side="left")
+        image_entry_faded_dark = Image.open("./resources/entry_faded_dark.png")
+        image_entry_faded = ctk.CTkImage(light_image=image_entry_faded_dark, dark_image=image_entry_faded_dark,
+                                         size=(20, 20))
+
+        self.button_entry = ctk.CTkButton(self.frame_top, width=20, image=image_entry_faded, text="",
+                                          command=self.set_entry, fg_color="transparent", hover=False)
+        self.button_entry.pack(padx=(5, 0), pady=2, side="left")
+        self.is_entry = False
+
+        image_halting_faded_dark = Image.open("./resources/halting_faded_dark.png")
+        image_halting_faded = ctk.CTkImage(light_image=image_halting_faded_dark, dark_image=image_halting_faded_dark,
+                                           size=(20, 20))
+
+        self.button_halting = ctk.CTkButton(self.frame_top, width=20, image=image_halting_faded, text="",
+                                            command=self.set_halting, fg_color="transparent", hover=False)
+        self.button_halting.pack(padx=(0, 5), pady=2, side="left")
+        self.is_halting = False
 
         image_save_light = Image.open("./resources/save_light.png")
         image_save_dark = Image.open("./resources/save_dark.png")
@@ -31,7 +46,7 @@ class StateView(ctk.CTkFrame):
         image_close = ctk.CTkImage(light_image=image_close_light, dark_image=image_close_dark, size=(20, 20))
 
         self.button_delete = ctk.CTkButton(self.frame_top, width=20, image=image_close, text="", anchor="e")
-        self.button_delete.pack(padx=(0, 2), pady=2, side="right")
+        self.button_delete.pack(padx=(0, 2), pady=2, side="left")
 
         image_edit_light = Image.open("./resources/edit_light.png")
         image_edit_dark = Image.open("./resources/edit_dark.png")
@@ -42,24 +57,66 @@ class StateView(ctk.CTkFrame):
         self.textbox_transitions = ctk.CTkTextbox(self)
         self.textbox_transitions.pack(fill="both", expand=True, padx=5, pady=5)
 
-        self.frame_bottom = ctk.CTkScrollableFrame(self, orientation="vertical", width=100)
+        self.frame_bottom_width = 130
+        self.frame_bottom_offset = 0
+        self.frame_bottom = ctk.CTkScrollableFrame(self, orientation="vertical", width=self.frame_bottom_width)
 
-    def show_transition(self, transition: str):
-        transition = view.TransitionView(self.frame_bottom, transition)
-        transition.pack(anchor="w", fill="x", expand=True)
+    def set_entry(self):
+        if self.is_entry:
+            image_entry_faded_dark = Image.open("./resources/entry_faded_dark.png")
+            image_entry_faded = ctk.CTkImage(light_image=image_entry_faded_dark, dark_image=image_entry_faded_dark,
+                                             size=(20, 20))
+            self.button_entry.configure(image=image_entry_faded)
+            self.is_entry = False
+        else:
+            image_entry_dark = Image.open("./resources/entry_dark.png")
+            image_entry = ctk.CTkImage(light_image=image_entry_dark, dark_image=image_entry_dark, size=(20, 20))
+            self.button_entry.configure(image=image_entry)
+            self.is_entry = True
 
-    def show_state(self, name: str, is_halting_state, transitions: list[str]):
-        self.label_name.configure(width=60, height=18, font=("", 18, "bold"))
+    def set_halting(self):
+        if self.is_halting:
+            image_halting_faded_dark = Image.open("./resources/halting_faded_dark.png")
+            image_halting_faded = ctk.CTkImage(light_image=image_halting_faded_dark,
+                                               dark_image=image_halting_faded_dark, size=(20, 20))
+            self.button_halting.configure(image=image_halting_faded)
+            self.is_halting = False
+        else:
+            image_halting_dark = Image.open("./resources/halting_dark.png")
+            image_halting = ctk.CTkImage(light_image=image_halting_dark, dark_image=image_halting_dark, size=(20, 20))
+            self.button_halting.configure(image=image_halting)
+            self.is_halting = True
+
+    def show_transition(self, tape: str, read: str, write: str, movement: str, new_state: str):
+        transition_view = view.TransitionView(self.frame_bottom, tape, read, write,
+                                              movement, new_state)
+        transition_view.pack(anchor="w", fill="x", expand=True)
+
+        size_new_state = ctk.CTkFont("", 15, "bold").measure(new_state)
+        if size_new_state > self.frame_bottom_offset:
+            self.frame_bottom_offset = size_new_state
+            self.frame_bottom.configure(width=self.frame_bottom_width + self.frame_bottom_offset)
+
+    def show_state(self, name: str, is_halting_state, is_entry_state, transitions: list[dict[str]]):
+        self.label_name.configure(height=18, font=("", 18, "bold"), text=name, anchor="w")
         self.entry_name.pack_forget()
+        self.button_entry.pack_forget()
+        self.button_halting.pack_forget()
         self.button_save.pack_forget()
-        self.checkbox_halting_state.pack_forget()
-        self.label_name.configure(text=name)
-        self.label_name.pack(fill="both", expand=True, padx=10, pady=2, side="left")
-        self.button_edit.pack(padx=(0, 2), pady=2, side="left")
+        self.button_delete.pack_forget()
+        self.label_name.configure(width=0)
+        self.label_name.pack(fill="both", expand=True, padx=(20, 10), pady=2, side="left")
+        self.button_delete.pack(padx=(0, 2), pady=2, side="right")
+        self.button_edit.pack(padx=(0, 2), pady=2, side="right")
         self.textbox_transitions.pack_forget()
         self.frame_bottom.pack(fill="both", expand=True, padx=5, pady=5)
+
         for transition in transitions:
-            self.show_transition(transition)
+            self.show_transition(transition["tape"], transition["read"], transition["write"], transition["movement"],
+                                 transition["new_state"])
+
+        if is_halting_state:
+            self.configure(border_color="black", border_width=2)
 
     def edit_state(self, name: str, is_halting_state: bool, transitions: str):
         pass

@@ -6,8 +6,11 @@ class State:
         self.is_halting_state: bool = is_halting_state
         self.transitions: list[model.Transition] = transitions or []
 
-    def list_transitions(self) -> list[str]:
-        transitions_list = []
+    def to_dict(self) -> list[dict[str]]:
+        transitions = []
         for transition in self.transitions:
-            transitions_list.append(str(transition.tape) + " " + transition.read + " " + transition.write + " " +
-                                    transition.movement + " " + transition.new_state)
+            transitions_entry = {"tape": str(transition.tape), "read": transition.read, "write": transition.write,
+                                 "movement": transition.movement, "new_state": transition.new_state}
+            transitions.append(transitions_entry)
+        return transitions
+

@@ -1,8 +1,8 @@
-import model
-import re
+from model.transition import Transition
+from model.tape import Tape
+from model.state import State
 
 BLANK_SYMBOL = " "
-TRANSITION_REGEX = re.compile("[1-9][0,9]*:.?->.,[LRN],.+")
 
 
 class TuringMachine(object):
@@ -10,8 +10,8 @@ class TuringMachine(object):
         if not hasattr(cls, "instance"):
             cls.instance = super(TuringMachine, cls).__new__(cls)
 
-            cls.instance.states: dict[str, model.State] = states or {}
-            cls.instance.tapes: list[model.Tape] = tapes or []
+            cls.instance.states: dict[str, State] = states or {}
+            cls.instance.tapes: list[Tape] = tapes or []
             cls.instance.entry_state: int = entry_state
         return cls.instance
 
@@ -27,30 +27,10 @@ class TuringMachine(object):
     def get_halting_states(self):
         return set([name for name in self.states.keys() if self.states[name].is_halting_state])
 
-    def add_state(self, name: str, is_halting_state: bool, transitions: str):
-        parsed_transitions: list[model.Transition] = []
-        split_transitions = transitions.splitlines()
-        for transition in split_transitions:
-            transition.replace(" ", "")
-            transitions.lstrip("0")
-            if TRANSITION_REGEX.fullmatch(transition):
-                tape_split = transition.split(":", 1)
-                tape = int(tape_split[0])
+    def check_name(self, name: str):
+        if name in self.states.keys() or not name:
+            raise ValueError
 
-                read = tape_split[1][0]
-                rest = tape_split[1][3:]
+    def add_state(self, name: str, is_halting_state: bool, transitions: list[Transition]):
+        self.states[name] = State(is_halting_state, transitions)
 
-                if tape_split[1].startswith("->"):
-                    read = BLANK_SYMBOL
-                    rest = tape_split[1][2:]
-
-                write = rest[0]
-                rest = rest[2:]
-
-                movement = rest[0]
-                new_state = rest[2:]
-
-                parsed_transitions.append(model.Transition(tape, read, write, movement, new_state))
-
-        if name not in self.states.keys():
-            self.states[name] = model.State(is_halting_state, parsed_transitions)
