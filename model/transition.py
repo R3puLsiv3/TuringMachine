@@ -8,7 +8,7 @@ def parse_transitions(transitions: str):
     parsed_transitions: list[model.Transition] = []
     split_transitions = transitions.splitlines()
     for transition in split_transitions:
-        transition.replace(" ", "")
+        transition = transition.replace(" ", "")
         transitions.lstrip("0")
         if TRANSITION_REGEX.fullmatch(transition):
 
@@ -36,10 +36,22 @@ def parse_transitions(transitions: str):
             movement = rest[0]
             new_state = rest[2:]
 
+            # TODO: Remodel transitions to disallow for duplicate read possibility
             parsed_transitions.append(model.Transition(tape, read, write, movement, new_state))
+        elif not transition:
+            continue
         else:
             raise ValueError
     return parsed_transitions
+
+
+def reverse_parse_transitions(transitions) -> str:
+    transition_str = ""
+
+    for transition in transitions:
+        transition_str += str(transition.tape) + ":" + transition.read + "->" + transition.write + "," + \
+                          transition.movement + "," + transition.new_state + "\n"
+    return transition_str[:-1]
 
 
 class Transition:

@@ -12,7 +12,7 @@ class TuringMachine(object):
 
             cls.instance.states: dict[str, State] = states or {}
             cls.instance.tapes: list[Tape] = tapes or []
-            cls.instance.entry_state: int = entry_state
+            cls.instance.entry_state: str = entry_state
         return cls.instance
 
     def get_tape_alphabet(self) -> set[str]:
@@ -30,7 +30,11 @@ class TuringMachine(object):
     def check_name(self, name: str):
         if name in self.states.keys() or not name:
             raise ValueError
+        return name.replace(" ", "")
 
     def add_state(self, name: str, is_halting_state: bool, transitions: list[Transition]):
         self.states[name] = State(is_halting_state, transitions)
+
+    def delete_state(self, name):
+        del self.states[name]
 

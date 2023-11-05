@@ -7,11 +7,12 @@ import view
 class StateView(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
+        self.parent = parent
 
         self.frame_top = ctk.CTkFrame(self)
         self.frame_top.pack(fill="x", padx=5, pady=(5, 0))
 
-        self.label_name = ctk.CTkLabel(self.frame_top)
+        self.label_name = ctk.CTkLabel(self.frame_top, width=0, height=18, font=("", 18, "bold"), anchor="w")
 
         self.entry_name = ctk.CTkEntry(self.frame_top, placeholder_text="Name", width=150, height=18)
         self.entry_name.pack(fill="both", expand=True, pady=2, side="left")
@@ -57,7 +58,8 @@ class StateView(ctk.CTkFrame):
         self.textbox_transitions = ctk.CTkTextbox(self)
         self.textbox_transitions.pack(fill="both", expand=True, padx=5, pady=5)
 
-        self.frame_bottom_width = 130
+        # Used to manually adjust the size of scrollable frame, since it doesn't expand as a usual frame.
+        self.frame_bottom_width = 180
         self.frame_bottom_offset = 0
         self.frame_bottom = ctk.CTkScrollableFrame(self, orientation="vertical", width=self.frame_bottom_width)
 
@@ -73,6 +75,8 @@ class StateView(ctk.CTkFrame):
             image_entry = ctk.CTkImage(light_image=image_entry_dark, dark_image=image_entry_dark, size=(20, 20))
             self.button_entry.configure(image=image_entry)
             self.is_entry = True
+
+            self.parent.set_entry(self)
 
     def set_halting(self):
         if self.is_halting:
@@ -97,26 +101,45 @@ class StateView(ctk.CTkFrame):
             self.frame_bottom_offset = size_new_state
             self.frame_bottom.configure(width=self.frame_bottom_width + self.frame_bottom_offset)
 
-    def show_state(self, name: str, is_halting_state, is_entry_state, transitions: list[dict[str]]):
-        self.label_name.configure(height=18, font=("", 18, "bold"), text=name, anchor="w")
+    def show_state(self, name: str, transitions: list[dict[str]]):
+        self.label_name.configure(text=name)
         self.entry_name.pack_forget()
         self.button_entry.pack_forget()
         self.button_halting.pack_forget()
         self.button_save.pack_forget()
         self.button_delete.pack_forget()
-        self.label_name.configure(width=0)
         self.label_name.pack(fill="both", expand=True, padx=(20, 10), pady=2, side="left")
         self.button_delete.pack(padx=(0, 2), pady=2, side="right")
         self.button_edit.pack(padx=(0, 2), pady=2, side="right")
+
         self.textbox_transitions.pack_forget()
+        for child in self.frame_bottom.winfo_children():
+            child.destroy()
         self.frame_bottom.pack(fill="both", expand=True, padx=5, pady=5)
 
         for transition in transitions:
             self.show_transition(transition["tape"], transition["read"], transition["write"], transition["movement"],
                                  transition["new_state"])
 
-        if is_halting_state:
+        if self.is_halting:
             self.configure(border_color="black", border_width=2)
 
-    def edit_state(self, name: str, is_halting_state: bool, transitions: str):
-        pass
+    def edit_state(self, name: str, transitions: str):
+        self.entry_name.delete(0, ctk.END)
+        self.entry_name.insert(0, name)
+        self.label_name.pack_forget()
+        self.button_edit.pack_forget()
+        self.button_delete.pack_forget()
+        self.entry_name.pack(fill="both", expand=True, pady=2, side="left")
+
+        self.button_entry.pack(padx=(5, 0), pady=2, side="left")
+
+        self.button_halting.pack(padx=(0, 5), pady=2, side="left")
+        self.button_save.pack(padx=(0, 2), pady=2, side="left")
+        self.button_delete.pack(padx=(0, 2), pady=2, side="left")
+
+        self.textbox_transitions = ctk.CTkTextbox(self)
+        self.textbox_transitions.insert("0.0", transitions)
+        self.frame_bottom.pack_forget()
+        self.textbox_transitions.pack(fill="both", expand=True, padx=5, pady=5)
+

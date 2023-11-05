@@ -16,6 +16,9 @@ class StatesController:
         self.options_controller = options_controller
         self.info_controller = info_controller
 
-    def create_state(self):
-        self.state_controllers.append(controller.StateController(self.model, self.frame.create_state()))
+    def create_state_controller(self):
+        self.state_controllers.append(controller.StateController(self, self.model, self.frame.create_state()))
+
+    def delete_state_controller(self, state_controller):
+        self.state_controllers.remove(state_controller)
 

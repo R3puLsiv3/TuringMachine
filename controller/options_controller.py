@@ -19,5 +19,5 @@ class OptionsController:
         self.frame.button_add_state.configure(command=self.create_state)
 
     def create_state(self):
-        self.states_controller.create_state()
+        self.states_controller.create_state_controller()
 
