@@ -7,3 +7,9 @@ class OptionsView(ctk.CTkFrame):
 
         self.button_add_state = ctk.CTkButton(self, width=50, text="Add state")
         self.button_add_state.pack(side="left")
+
+        self.button_add_tape = ctk.CTkButton(self, width=50, text="Add tape")
+        self.button_add_tape.pack(side="left")
+
+        self.button_delete_tape = ctk.CTkButton(self, width=50, text="Delete tape")
+        self.button_delete_tape.pack(side="left")

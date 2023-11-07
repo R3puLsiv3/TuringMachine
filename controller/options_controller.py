@@ -17,7 +17,15 @@ class OptionsController:
 
     def bind(self):
         self.frame.button_add_state.configure(command=self.create_state)
+        self.frame.button_add_tape.configure(command=self.create_tape)
+        self.frame.button_delete_tape.configure(command=self.delete_tape)
 
     def create_state(self):
         self.states_controller.create_state_controller()
+
+    def create_tape(self):
+        self.tapes_controller.create_tape_controller()
+
+    def delete_tape(self):
+        self.tapes_controller.delete_tape_controller()
 

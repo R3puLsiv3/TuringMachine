@@ -131,9 +131,7 @@ class StateView(ctk.CTkFrame):
         self.button_edit.pack_forget()
         self.button_delete.pack_forget()
         self.entry_name.pack(fill="both", expand=True, pady=2, side="left")
-
         self.button_entry.pack(padx=(5, 0), pady=2, side="left")
-
         self.button_halting.pack(padx=(0, 5), pady=2, side="left")
         self.button_save.pack(padx=(0, 2), pady=2, side="left")
         self.button_delete.pack(padx=(0, 2), pady=2, side="left")
@@ -142,4 +140,3 @@ class StateView(ctk.CTkFrame):
         self.textbox_transitions.insert("0.0", transitions)
         self.frame_bottom.pack_forget()
         self.textbox_transitions.pack(fill="both", expand=True, padx=5, pady=5)
-

@@ -3,4 +3,5 @@ from controller.options_controller import OptionsController
 from controller.states_controller import StatesController
 from controller.state_controller import StateController
 from controller.tapes_controller import TapesController
+from controller.tape_controller import TapeController
 from controller.base import Controller

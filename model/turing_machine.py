@@ -38,3 +38,10 @@ class TuringMachine(object):
     def delete_state(self, name):
         del self.states[name]
 
+    def add_tape(self, tape_input):
+        tape_state = [BLANK_SYMBOL] * 64 + list(tape_input) + [BLANK_SYMBOL] * 64
+        self.tapes.append(Tape(tape_state))
+
+    def delete_tape(self):
+        del self.tapes[:-1]
+

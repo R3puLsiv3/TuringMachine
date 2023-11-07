@@ -7,9 +7,6 @@ class TransitionView(ctk.CTkFrame):
         super().__init__(parent, fg_color="transparent")
 
         tape = tape + ":"
-        read = read
-        write = write
-        rest = "  |  " + movement + "  |  " + new_state
 
         image_right_arrow_light = Image.open("./resources/arrow_right_light.png")
         image_right_arrow_dark = Image.open("./resources/arrow_right_dark.png")
@@ -44,5 +41,14 @@ class TransitionView(ctk.CTkFrame):
             self.read_label = ctk.CTkLabel(self, width=18, text=write, font=("", 15, "bold"))
             self.read_label.pack(side="left")
 
-        self.rest = ctk.CTkLabel(self, text=rest, font=("", 15, "bold"), height=20, anchor="w")
-        self.rest.pack(padx=(0, 10), side="left")
+        self.divider1 = ctk.CTkLabel(self, text="|", width=18, font=("", 15, "bold"), height=20)
+        self.divider1.pack(side="left")
+
+        self.movement = ctk.CTkLabel(self, text=movement, width=18, font=("", 15, "bold"), height=20)
+        self.movement.pack(side="left")
+
+        self.divider2 = ctk.CTkLabel(self, text="|", width=18, font=("", 15, "bold"), height=20)
+        self.divider2.pack(side="left")
+
+        self.new_state = ctk.CTkLabel(self, text=new_state, font=("", 15, "bold"), height=20, anchor="w")
+        self.new_state.pack(side="left")
