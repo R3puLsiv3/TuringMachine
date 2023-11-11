@@ -1,6 +1,7 @@
 from model.transition import Transition
 from model.tape import Tape
 from model.state import State
+from model.tape import TAPE_PADDING
 
 BLANK_SYMBOL = " "
 
@@ -13,6 +14,7 @@ class TuringMachine(object):
             cls.instance.states: dict[str, State] = states or {}
             cls.instance.tapes: list[Tape] = tapes or []
             cls.instance.entry_state: str = entry_state
+            cls.instance.current_state: str = entry_state
         return cls.instance
 
     def get_tape_alphabet(self) -> set[str]:
@@ -39,9 +41,12 @@ class TuringMachine(object):
         del self.states[name]
 
     def add_tape(self, tape_input):
-        tape_state = [BLANK_SYMBOL] * 64 + list(tape_input) + [BLANK_SYMBOL] * 64
+        tape_state = [BLANK_SYMBOL] * TAPE_PADDING + list(tape_input) + [BLANK_SYMBOL] * TAPE_PADDING
         self.tapes.append(Tape(tape_state))
 
     def delete_tape(self):
         del self.tapes[:-1]
+
+    def reset_turing_machine(self):
+        self.tapes.clear()
 

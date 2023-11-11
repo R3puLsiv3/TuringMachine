@@ -1,5 +1,6 @@
 from model.turing_machine import TuringMachine
 from model.turing_machine import BLANK_SYMBOL
+from model.tape import TAPE_PADDING
 from model.settings import Settings
 from model.settings import create_settings
 from model.settings import load_settings
@@ -7,6 +8,5 @@ from model.settings import update_settings
 from model.settings import CONFIG_PATH
 from model.transition import Transition
 from model.state import State
-from model.head import Head
 from model.tape import Tape
 from model.base import Model

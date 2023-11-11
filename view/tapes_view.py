@@ -17,3 +17,7 @@ class TapesView(ctk.CTkScrollableFrame):
         tape = view.TapeView(self, tape_input)
         tape.pack(fill="x", pady=(20, 0))
         return tape
+
+    def delete_tapes(self):
+        for child in self.winfo_children():
+            child.destroy()

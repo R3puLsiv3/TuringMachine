@@ -12,20 +12,25 @@ class TapeView(ctk.CTkScrollableFrame):
         self.count = 0
         self.base = 0
 
+        self.labels: list[ctk.CTkLabel] = []
+
         for i in range(PADDING):
             label = ctk.CTkLabel(self, height=50, width=50, text=" ", fg_color="white", font=("", 35, "bold"),
                                  text_color="black", corner_radius=0)
             label.grid(row=1, column=i, pady=4, padx=2)
+            self.labels.append(label)
 
         for i in range(len(self.tape_input)):
             label = ctk.CTkLabel(self, height=50, width=50, text=self.tape_input[i], fg_color="white", font=("", 35, "bold"),
                                  text_color="black", corner_radius=0)
             label.grid(row=1, column=i+PADDING, pady=4, padx=2)
+            self.labels.append(label)
 
         for i in range(PADDING):
             label = ctk.CTkLabel(self, height=50, width=50, text=" ", fg_color="white", font=("", 35, "bold"),
                                  text_color="black", corner_radius=0)
             label.grid(row=1, column=i+PADDING+len(self.tape_input), pady=4, padx=2)
+            self.labels.append(label)
 
         # Credit: <a target="_blank" href="https://icons8.com/icon/6kvmvAorttE3/down">Down</a>
         # icon by <a target="_blank" href = "https://icons8.com">Icons8</a>
@@ -47,7 +52,7 @@ class TapeView(ctk.CTkScrollableFrame):
             self.after(10, self.do_after, direction)
         else:
             self.count = 0
-            self.head.grid(row=0, column=self.pos + direction)
+            self.head.grid(row=0, column=self.pos)
             self._parent_canvas.xview(ctk.SCROLL, direction * 4, ctk.UNITS)
 
     def delete_tape(self):

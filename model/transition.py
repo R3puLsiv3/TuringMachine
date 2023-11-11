@@ -14,10 +14,10 @@ def parse_transitions(transitions: str):
 
             if transition[0].isdigit() and (transition[1].isdigit() or transition[1] == ":"):
                 tape_split = transition.split(":", 1)
-                tape = int(tape_split[0])
+                tape = int(tape_split[0]) - 1
             else:
                 tape_split = ["", transition]
-                tape = 1
+                tape = 0
 
             if tape_split[1].startswith("->"):
                 read = model.turing_machine.BLANK_SYMBOL

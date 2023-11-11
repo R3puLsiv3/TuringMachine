@@ -1,3 +1,5 @@
+import threading
+
 
 class OptionsController:
     def __init__(self, model, view):
@@ -19,6 +21,7 @@ class OptionsController:
         self.frame.button_add_state.configure(command=self.create_state)
         self.frame.button_add_tape.configure(command=self.create_tape)
         self.frame.button_delete_tape.configure(command=self.delete_tape)
+        self.frame.button_play.configure(command=lambda: threading.Thread(target=self.play).start())
 
     def create_state(self):
         self.states_controller.create_state_controller()
@@ -28,4 +31,15 @@ class OptionsController:
 
     def delete_tape(self):
         self.tapes_controller.delete_tape_controller()
+
+    def play(self):
+        # TODO: Check if turing machine is in order and make it impossible to change turing machine during play
+        if self.tapes_controller.is_playing:
+            self.frame.button_play.configure(text="Play")
+            self.tapes_controller.is_playing = False
+        else:
+            self.frame.button_play.configure(text="Pause")
+            self.tapes_controller.play()
+            self.model.turing_machine.entry_state = self.model.turing_machine.current_state
+
 

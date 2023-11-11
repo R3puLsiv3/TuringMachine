@@ -13,3 +13,6 @@ class OptionsView(ctk.CTkFrame):
 
         self.button_delete_tape = ctk.CTkButton(self, width=50, text="Delete tape")
         self.button_delete_tape.pack(side="left")
+
+        self.button_play = ctk.CTkButton(self, width=50, text="Play")
+        self.button_play.pack(side="left")

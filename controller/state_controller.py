@@ -55,6 +55,7 @@ class StateController:
         self.parent.delete_state_controller(self)
 
     def edit_frame(self):
+        self.parent.tapes_controller.delete_tape_controllers()
         transitions_str = reverse_parse_transitions(self.model.turing_machine.states[self.name].transitions)
         self.model.turing_machine.delete_state(self.name)
 
