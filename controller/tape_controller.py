@@ -15,17 +15,17 @@ class TapeController:
         raise ValueError
 
     def perform_transition(self, transition):
-        time.sleep(1.0)
+        time.sleep(0.3)
         self.frame.labels[self.frame.pos].configure(text=transition.write)
         self.model.turing_machine.tapes[self.tape_number].write(transition.write)
-        time.sleep(1.0)
+        time.sleep(0.3)
         match transition.movement:
             case "L":
                 self.frame.do_after(-1)
                 self.frame.pos -= 1
                 self.model.turing_machine.tapes[self.tape_number].set_position(-1)
             case "N":
-                self.frame.doAfter(0)
+                self.frame.do_after(0)
             case "R":
                 self.frame.do_after(1)
                 self.frame.pos += 1

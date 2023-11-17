@@ -9,7 +9,7 @@ class State:
     def to_dict(self) -> list[dict[str]]:
         transitions = []
         for transition in self.transitions:
-            transitions_entry = {"tape": str(transition.tape), "read": transition.read, "write": transition.write,
+            transitions_entry = {"read": transition.read, "write": transition.write,
                                  "movement": transition.movement, "new_state": transition.new_state}
             transitions.append(transitions_entry)
         return transitions

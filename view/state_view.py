@@ -91,8 +91,8 @@ class StateView(ctk.CTkFrame):
             self.button_halting.configure(image=image_halting)
             self.is_halting = True
 
-    def show_transition(self, tape: str, read: str, write: str, movement: str, new_state: str):
-        transition_view = view.TransitionView(self.frame_bottom, tape, read, write,
+    def show_transition(self, read: list[str], write: list[str], movement: str, new_state: str):
+        transition_view = view.TransitionView(self.frame_bottom, read, write,
                                               movement, new_state)
         transition_view.pack(anchor="w", fill="x", expand=True)
 
@@ -118,7 +118,7 @@ class StateView(ctk.CTkFrame):
         self.frame_bottom.pack(fill="both", expand=True, padx=5, pady=5)
 
         for transition in transitions:
-            self.show_transition(transition["tape"], transition["read"], transition["write"], transition["movement"],
+            self.show_transition(transition["read"], transition["write"], transition["movement"],
                                  transition["new_state"])
 
         if self.is_halting:

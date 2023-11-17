@@ -7,7 +7,7 @@ class TapesView(ctk.CTkScrollableFrame):
         super().__init__(parent, orientation="vertical", corner_radius=0)
 
     def create_tape(self, name):
-        prompt_tape_input = ctk.CTkInputDialog(text="Tape " + name + " input:")
+        prompt_tape_input = ctk.CTkInputDialog(title="Add tape", text="Tape " + name + " input:")
         tape_input = prompt_tape_input.get_input()
 
         if tape_input is None:

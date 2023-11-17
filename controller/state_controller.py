@@ -34,12 +34,12 @@ class StateController:
                 self.model.turing_machine.entry_state = self.name
         except ValueError:
             message = "Transitions must be of the form\n" \
-                      "[T]:[R]->[W],[M],[N]\n" \
-                      "T = Tape number (Empty and no colon defaults to tape 1)\n" \
-                      "R = Symbol being read (Empty or space for blank symbol)\n" \
-                      "W = Symbol being written (Empty or space for blank symbol)\n" \
+                      "[R]->[W],[M],[S]\n" \
+                      "R = Symbol(s) being read divided by | for multiple tapes\n" \
+                      "W = Symbol(s) being written divided by | for multiple tapes\n" \
                       "M = Head movement (L=Left, N=None, R=Right)\n" \
-                      "N = New state (Name)"
+                      "S = New state (Name)\n" \
+                      "For R and W: blank = blank symbol, div = |, comma = ,"
 
             messagebox.showinfo(title="Wrong Transition", message=message)
             return

@@ -1,7 +1,8 @@
 import model
 import re
 
-TRANSITION_REGEX = re.compile("([1-9][0,9]*:)?.?->.?,[LRN],.+")
+TRANSITION_REGEX = re.compile("([^,\|]|blank|div|comma)(\|([^,\|]|blank|div|comma))*"
+                              "->([^,\|]|blank|div|comma)(\|([^,\|]|blank|div|comma))*,[LRN],.+")
 
 
 def parse_transitions(transitions: str):
@@ -9,35 +10,35 @@ def parse_transitions(transitions: str):
     split_transitions = transitions.splitlines()
     for transition in split_transitions:
         transition = transition.replace(" ", "")
-        transitions.lstrip("0")
         if TRANSITION_REGEX.fullmatch(transition):
+            read_split = transition.split("->", 1)
+            read = read_split[0].split("|")
+            for i in range(len(read)):
+                match read[i]:
+                    case "blank":
+                        read[i] = model.turing_machine.BLANK_SYMBOL
+                    case "div":
+                        read[i] = "|"
+                    case "comma":
+                        read[i] = ","
 
-            if transition[0].isdigit() and (transition[1].isdigit() or transition[1] == ":"):
-                tape_split = transition.split(":", 1)
-                tape = int(tape_split[0]) - 1
-            else:
-                tape_split = ["", transition]
-                tape = 0
+            write_split = read_split[1].split(",", 1)
+            write = write_split[0].split("|")
+            for i in range(len(write)):
+                match write[i]:
+                    case "blank":
+                        write[i] = model.turing_machine.BLANK_SYMBOL
+                    case "div":
+                        write[i] = "|"
+                    case "comma":
+                        write[i] = ","
 
-            if tape_split[1].startswith("->"):
-                read = model.turing_machine.BLANK_SYMBOL
-                rest = tape_split[1][2:]
-            else:
-                read = tape_split[1][0]
-                rest = tape_split[1][3:]
+            movement_split = write_split[1].split(",", 1)
+            movement = movement_split[0]
 
-            if rest[0] == "," and rest[1] != ",":
-                write = model.turing_machine.BLANK_SYMBOL
-                rest = rest[1:]
-            else:
-                write = rest[0]
-                rest = rest[2:]
+            new_state = movement_split[1]
 
-            movement = rest[0]
-            new_state = rest[2:]
-
-            # TODO: Remodel transitions to disallow for duplicate read possibility
-            parsed_transitions.append(model.Transition(tape, read, write, movement, new_state))
+            parsed_transitions.append(model.Transition(read, write, movement, new_state))
         elif not transition:
             continue
         else:
@@ -49,15 +50,36 @@ def reverse_parse_transitions(transitions) -> str:
     transition_str = ""
 
     for transition in transitions:
-        transition_str += str(transition.tape) + ":" + transition.read + "->" + transition.write + "," + \
-                          transition.movement + "," + transition.new_state + "\n"
+        read_str = ""
+        for symbol in transition.read:
+            match symbol:
+                case model.turing_machine.BLANK_SYMBOL:
+                    read_str += "blank" + "|"
+                case "|":
+                    read_str += "div" + "|"
+                case ",":
+                    read_str += "comma" + "|"
+                case _:
+                    read_str += symbol + "|"
+
+        write_str = ""
+        for symbol in transition.write:
+            match symbol:
+                case model.turing_machine.BLANK_SYMBOL:
+                    write_str += "blank" + "|"
+                case "|":
+                    write_str += "div" + "|"
+                case ",":
+                    write_str += "comma" + "|"
+                case _:
+                    write_str += symbol + "|"
+
+        transition_str += transition.read[:-1] + "->" + transition.write[:-1] + "," + transition.movement + "," + transition.new_state + "\n"
     return transition_str[:-1]
 
 
 class Transition:
-
-    def __init__(self, tape: int, read: str, write: str, movement: str, new_state: str):
-        self.tape = tape
+    def __init__(self, read: list[str], write: list[str], movement: str, new_state: str):
         self.read = read
         self.write = write
         self.movement = movement
