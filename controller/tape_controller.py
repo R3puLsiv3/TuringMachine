@@ -1,5 +1,3 @@
-import time
-
 
 class TapeController:
     def __init__(self, model, view, tape_number):
@@ -7,19 +5,13 @@ class TapeController:
         self.frame = view
         self.tape_number = tape_number
 
-    def find_transition(self):
-        symbol_read = self.model.turing_machine.tapes[self.tape_number].read()
-        for transition in self.model.turing_machine.states[self.model.turing_machine.current_state].transitions:
-            if transition.read == symbol_read:
-                return transition
-        raise ValueError
+    def read_symbol(self):
+        return self.model.turing_machine.tapes[self.tape_number].read()
 
-    def perform_transition(self, transition):
-        time.sleep(0.3)
-        self.frame.labels[self.frame.pos].configure(text=transition.write)
-        self.model.turing_machine.tapes[self.tape_number].write(transition.write)
-        time.sleep(0.3)
-        match transition.movement:
+    def perform_transition(self, write, movement, new_state):
+        self.frame.labels[self.frame.pos].configure(text=write)
+        self.model.turing_machine.tapes[self.tape_number].write(write)
+        match movement:
             case "L":
                 self.frame.do_after(-1)
                 self.frame.pos -= 1
@@ -31,4 +23,4 @@ class TapeController:
                 self.frame.pos += 1
                 self.model.turing_machine.tapes[self.tape_number].set_position(1)
 
-        self.model.turing_machine.current_state = transition.new_state
+        self.model.turing_machine.current_state = new_state

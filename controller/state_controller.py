@@ -37,9 +37,10 @@ class StateController:
                       "[R]->[W],[M],[S]\n" \
                       "R = Symbol(s) being read divided by | for multiple tapes\n" \
                       "W = Symbol(s) being written divided by | for multiple tapes\n" \
-                      "M = Head movement (L=Left, N=None, R=Right)\n" \
+                      "M = Head movement(s) (L=Left, N=None, R=Right) divided by | for multiple tapes\n" \
                       "S = New state (Name)\n" \
-                      "For R and W: blank = blank symbol, div = |, comma = ,"
+                      "For R and W: blank = blank symbol, div = |, comma = ,\n" \
+                      "R,W and M must have equal length"
 
             messagebox.showinfo(title="Wrong Transition", message=message)
             return

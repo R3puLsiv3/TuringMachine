@@ -15,7 +15,22 @@ class TuringMachine(object):
             cls.instance.tapes: list[Tape] = tapes or []
             cls.instance.entry_state: str = entry_state
             cls.instance.current_state: str = entry_state
+
+            # Table for faster lookup of transitions
+            # (state, read_symbols) -> (write_symbols, movements, new_state)
+            cls.instance.multi_tape_transitions: dict[tuple[str, tuple[str, ...]], tuple[tuple[str], tuple[str], str]] = {}
+            cls.instance.single_tape_transitions: dict[tuple[str, str], tuple[str, str, str]] = {}
         return cls.instance
+
+    def create_single_tape_transitions(self):
+        for state in self.states:
+            for transition in self.states[state].transitions:
+                self.single_tape_transitions[(state, transition.read[0])] = (transition.write[0], transition.movement[0], transition.new_state)
+
+    def create_multi_tape_transitions(self):
+        for state in self.states:
+            for transition in self.states[state].transitions:
+                self.multi_tape_transitions[(state, tuple(transition.read))] = (tuple(transition.write), tuple(transition.movement), transition.new_state)
 
     def get_tape_alphabet(self) -> set[str]:
         return set([transition.write for state in self.states.keys()

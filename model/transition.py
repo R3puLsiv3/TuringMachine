@@ -1,8 +1,8 @@
 import model
 import re
 
-TRANSITION_REGEX = re.compile("([^,\|]|blank|div|comma)(\|([^,\|]|blank|div|comma))*"
-                              "->([^,\|]|blank|div|comma)(\|([^,\|]|blank|div|comma))*,[LRN],.+")
+TRANSITION_REGEX = re.compile("([^,|]|blank|div|comma)(\|([^,|]|blank|div|comma))*"
+                              "->([^,|]|blank|div|comma)(\|([^,|]|blank|div|comma))*,[LRN](\|[LRN])*,.+")
 
 
 def parse_transitions(transitions: str):
@@ -33,8 +33,14 @@ def parse_transitions(transitions: str):
                     case "comma":
                         write[i] = ","
 
+            if len(read) != len(write):
+                raise ValueError
+
             movement_split = write_split[1].split(",", 1)
-            movement = movement_split[0]
+            movement = movement_split[0].split("|")
+
+            if len(movement) != len(write):
+                raise ValueError
 
             new_state = movement_split[1]
 
@@ -74,12 +80,16 @@ def reverse_parse_transitions(transitions) -> str:
                 case _:
                     write_str += symbol + "|"
 
-        transition_str += transition.read[:-1] + "->" + transition.write[:-1] + "," + transition.movement + "," + transition.new_state + "\n"
+        movement_str = ""
+        for symbol in transition.movement:
+            movement_str += symbol + "|"
+
+        transition_str += read_str[:-1] + "->" + write_str[:-1] + "," + movement_str[:-1] + "," + transition.new_state + "\n"
     return transition_str[:-1]
 
 
 class Transition:
-    def __init__(self, read: list[str], write: list[str], movement: str, new_state: str):
+    def __init__(self, read: list[str], write: list[str], movement: list[str], new_state: str):
         self.read = read
         self.write = write
         self.movement = movement

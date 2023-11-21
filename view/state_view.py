@@ -8,6 +8,7 @@ class StateView(ctk.CTkFrame):
     def __init__(self, parent):
         super().__init__(parent)
         self.parent = parent
+        self.transitions = []
 
         self.frame_top = ctk.CTkFrame(self)
         self.frame_top.pack(fill="x", padx=5, pady=(5, 0))
@@ -59,8 +60,7 @@ class StateView(ctk.CTkFrame):
         self.textbox_transitions.pack(fill="both", expand=True, padx=5, pady=5)
 
         # Used to manually adjust the size of scrollable frame, since it doesn't expand as a usual frame.
-        self.frame_bottom_width = 180
-        self.frame_bottom_offset = 0
+        self.frame_bottom_width = 0
         self.frame_bottom = ctk.CTkScrollableFrame(self, orientation="vertical", width=self.frame_bottom_width)
 
     def set_entry(self):
@@ -95,11 +95,11 @@ class StateView(ctk.CTkFrame):
         transition_view = view.TransitionView(self.frame_bottom, read, write,
                                               movement, new_state)
         transition_view.pack(anchor="w", fill="x", expand=True)
+        self.transitions.append(transition_view)
 
-        size_new_state = ctk.CTkFont("", 15, "bold").measure(new_state)
-        if size_new_state > self.frame_bottom_offset:
-            self.frame_bottom_offset = size_new_state
-            self.frame_bottom.configure(width=self.frame_bottom_width + self.frame_bottom_offset)
+        if transition_view.width > self.frame_bottom_width:
+            self.frame_bottom_width = transition_view.width
+            self.frame_bottom.configure(width=self.frame_bottom_width)
 
     def show_state(self, name: str, transitions: list[dict[str]]):
         self.label_name.configure(text=name)

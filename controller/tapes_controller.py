@@ -1,5 +1,6 @@
 import controller
 from tkinter import messagebox
+import time
 
 
 class TapesController:
@@ -40,25 +41,50 @@ class TapesController:
             return
         self.model.turing_machine.current_state = self.model.turing_machine.entry_state
 
-        self.is_playing = True
-        while self.is_playing:
-            self.perform_step()
+        if not self.model.turing_machine.tapes:
+            messagebox.showinfo(title="No tape",
+                                message="Turing machine requires a tape.")
+            return
+        elif len(self.model.turing_machine.tapes) == 1:
+            self.model.turing_machine.create_single_tape_transitions()
+            self.is_playing = True
+            while self.is_playing:
+                self.perform_step_single_tape()
+        else:
+            self.model.turing_machine.create_multi_tape_transitions()
+            self.is_playing = True
+            while self.is_playing:
+                self.perform_step_multi_tape()
 
-    def perform_step(self):
-        transitions = []
+    def perform_step_single_tape(self):
+        tape_read = self.tape_controllers[0].read_symbol()
+
+        try:
+            transition = self.model.turing_machine.single_tape_transitions[(self.model.turing_machine.current_state, tape_read)]
+            self.tape_controllers[0].perform_transition(transition[0], transition[1], transition[2])
+            time.sleep(0.5)
+        except KeyError:
+            if self.model.turing_machine.states[self.model.turing_machine.current_state].is_halting_state:
+                self.info_controller.show_accept()
+            else:
+                self.info_controller.show_not_accept()
+
+    def perform_step_multi_tape(self):
+        tapes_read = []
         for tape_controller in self.tape_controllers:
-            try:
-                transition = tape_controller.find_transition()
-                transitions.append(transition)
-                print(transition.read, transition.write, transition.movement, transition.new_state)
-            except ValueError:
-                if self.model.turing_machine.states[self.model.turing_machine.current_state].is_halting_state:
-                    self.info_controller.show_accept()
-                else:
-                    self.info_controller.show_not_accept()
+            tapes_read.append(tape_controller.read_symbol())
 
-        for index, transition in enumerate(transitions):
-            self.tape_controllers[index].perform_transition(transition)
+        try:
+            transition = self.model.turing_machine.multi_tape_transitions[(self.model.turing_machine.current_state, tuple(tapes_read))]
+
+            for i in range(len(self.tape_controllers)):
+                self.tape_controllers[i].perform_transition(transition[0][i], transition[1][i], transition[2])
+            time.sleep(0.5)
+        except KeyError:
+            if self.model.turing_machine.states[self.model.turing_machine.current_state].is_halting_state:
+                self.info_controller.show_accept()
+            else:
+                self.info_controller.show_not_accept()
 
     def delete_tape_controllers(self):
         self.tape_controllers.clear()
